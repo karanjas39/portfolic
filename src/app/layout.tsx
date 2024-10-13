@@ -12,8 +12,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: `${web_app_name} - Build & Share`,
-  description: `${web_app_name} is a user-friendly portfolio building platform designed to help you showcase your talents and achievements effortlessly. Create, share, and manage your professional presence with customizable templates and a seamless user experience.`,
+  title: `${web_app_name} - Showcase Your Story`,
+  description: `${web_app_name} is a user-friendly portfolio building platform designed to help you showcase your talents and achievements effortlessly. Create, share, and manage your professional presence with existing templates and a seamless user experience.`,
   keywords: "portfolio builder, portfolic",
   authors: [
     { name: "Jaskaran Singh", url: "https://developerjaskaran.netlify.app/" },
