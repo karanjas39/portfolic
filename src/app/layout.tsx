@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar/navbar";
 import { web_app_name } from "@/lib/constants";
 import { Poppins as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import Providers from "@/components/provider/provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn("font-sans antialiased", fontSans.variable)}>
         <Navbar />
-        <div className="pt-12">{children}</div>
+        <div className="pt-12">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );
