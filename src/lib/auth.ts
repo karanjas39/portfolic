@@ -5,10 +5,12 @@ export const NEXT_AUTH_CONFIG = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "email", type: "text", placeholder: "" },
-        password: { label: "password", type: "password", placeholder: "" },
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" },
       },
       async authorize() {
+        // const isUser=await
+
         return {
           id: "user1",
           name: "asd",

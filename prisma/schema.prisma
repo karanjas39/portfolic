@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int              @id @default(autoincrement())
+  email        String           @unique
+  password     String
+  name         String?
+  admin        Boolean          @default(false)
+  telegramId   String?
+  portfolios   Portfolio[]
+  subscription Subscription?
+  socialMedia  SocialMedia[]
+  notifications Notification[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model Portfolio {
+  id            Int              @id @default(autoincrement())
+  userId        Int
+  public        Boolean          @default(true)
+  title         String
+  description   String?
+  templateId    Int?
+  projects      Project[]
+  skills        PortfolioSkill[]
+  experiences   Experience[]
+  education     Education[]
+  contacts      Contact[]
+  analytics     Analytics?
+
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  user          User             @relation(fields: [userId], references: [id])
+  template      Template?        @relation(fields: [templateId], references: [id])
+}
+
+model Project {
+  id            Int              @id @default(autoincrement())
+  portfolioId   Int
+  title         String
+  description   String?
+  url           String[]         // Array to handle multiple project links
+  skills        ProjectSkill[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+}
+
+model Skill {
+  id            Int              @id @default(autoincrement())
+  name          String           @unique
+  predefined    Boolean          @default(false)
+  portfolios    PortfolioSkill[]
+  projects      ProjectSkill[]
+}
+
+model PortfolioSkill {
+  id            Int              @id @default(autoincrement())
+  portfolioId   Int
+  skillId       Int
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+  skill         Skill            @relation(fields: [skillId], references: [id])
+}
+
+model ProjectSkill {
+  id            Int              @id @default(autoincrement())
+  projectId     Int
+  skillId       Int
+
+  project       Project          @relation(fields: [projectId], references: [id])
+  skill         Skill            @relation(fields: [skillId], references: [id])
+}
+
+model Experience {
+  id            Int              @id @default(autoincrement())
+  portfolioId   Int
+  companyName   String
+  role          String
+  startDate     DateTime
+  endDate       DateTime?
+  description   String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+}
+
+model Education {
+  id            Int              @id @default(autoincrement())
+  portfolioId   Int
+  institutionName String
+  degree        String
+  startDate     DateTime?
+  endDate       DateTime?
+  percentage    Float?
+  description   String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+}
+
+model Subscription {
+  id            Int              @id @default(autoincrement())
+  userId        Int              @unique
+  planId        String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  user          User             @relation(fields: [userId], references: [id])
+  plan          Plan             @relation(fields: [planId], references: [id])
+}
+
+model Plan {
+  id            String           @id @default(cuid())
+  name          String
+  price         Float
+  features      String[]         // Array for plan-specific features
+  subscriptions Subscription[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Template {
+  id            Int              @id @default(autoincrement())
+  name          String
+  category      String           // e.g., 'Professional', 'Creative'
+  premium       Boolean          @default(false)
+  // path          String           // Path to template folder or file
+  portfolios    Portfolio[]
+  createdAt     DateTime         @default(now())
+}
+
+model Contact {
+  id            Int              @id @default(autoincrement())
+  portfolioId   Int
+  name          String
+  email         String
+  message       String?
+  createdAt     DateTime         @default(now())
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+}
+
+model Analytics {
+  id            Int              @id  @default(autoincrement())
+  portfolioId   Int              @unique
+  views         Int              @default(0)
+  clicks        Int              @default(0)
+  createdAt     DateTime         @default(now())
+
+  portfolio     Portfolio        @relation(fields: [portfolioId], references: [id])
+}
+
+model Notification {
+  id            Int              @id @default(autoincrement())
+  userId        Int
+  type          String           // e.g., 'Contact', 'Analytics', 'Subscription'
+  message       String
+  read          Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+
+  user          User             @relation(fields: [userId], references: [id])
+}
+
+model SocialMedia {
+  id            Int              @id @default(autoincrement())
+  userId        Int
+  platform      String           // e.g., 'LinkedIn', 'GitHub'
+  url           String
+
+  user          User             @relation(fields: [userId], references: [id])
+}
