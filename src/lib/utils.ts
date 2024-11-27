@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodType } from "zod";
+import { NEXT_AUTH_CONFIG } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -25,4 +27,9 @@ export function getMissingFields<T extends ZodType<any, any>>(
     .join(", ");
 
   return `Required fields: ${missingFields}`;
+}
+
+export async function getUser() {
+  const session = await getServerSession(NEXT_AUTH_CONFIG);
+  return session;
 }

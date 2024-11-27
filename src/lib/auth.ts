@@ -1,4 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "@/db";
+import { compareSync } from "bcrypt-ts";
 
 export const NEXT_AUTH_CONFIG = {
   providers: [
@@ -8,14 +10,25 @@ export const NEXT_AUTH_CONFIG = {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
-      async authorize() {
-        // const isUser=await
+      async authorize(creds: any) {
+        const isUser = await prisma.user.findUnique({
+          where: { email: creds?.email },
+        });
+
+        if (!isUser) {
+          return null;
+        }
+
+        const isPasswordValid = compareSync(creds.password, isUser.password);
+
+        if (!isPasswordValid) {
+          return null;
+        }
 
         return {
-          id: "user1",
-          name: "asd",
-          userId: "asd",
-          email: "ramdomEmail",
+          id: isUser.id.toString(),
+          name: isUser.name,
+          email: isUser.email,
         };
       },
     }),

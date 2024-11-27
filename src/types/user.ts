@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const z_signin = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email({ message: "This is not a valid email." }),
+  password: z.string().min(1),
 });
 
 export const z_signup = z.object({
