@@ -1,11 +1,11 @@
-import SignIn from "@/components/signin";
+import SignUp from "@/components/signup";
 
-function SignInPage() {
+function SignUpPage() {
   return (
     <div className="w-[95%] sm:w-[70%] mx-auto flex flex-col items-center justify-center flex-1">
-      <SignIn />
+      <SignUp />
     </div>
   );
 }
 
-export default SignInPage;
+export default SignUpPage;

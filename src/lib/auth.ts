@@ -29,6 +29,7 @@ export const NEXT_AUTH_CONFIG = {
           id: isUser.id.toString(),
           name: isUser.name,
           email: isUser.email,
+          admin: isUser.admin,
         };
       },
     }),
@@ -38,12 +39,14 @@ export const NEXT_AUTH_CONFIG = {
     jwt: async ({ user, token }: any) => {
       if (user) {
         token.uid = user.id;
+        token.admin = user.admin;
       }
       return token;
     },
     session: ({ session, token }: any) => {
       if (session.user) {
         session.user.id = token.uid;
+        session.user.admin = token.admin;
       }
       return session;
     },

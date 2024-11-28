@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     if (user) {
       return NextResponse.json(
-        { error: "User is already registered with email." },
+        { error: "User is already registered with this email." },
         { status: 401 }
       );
     }

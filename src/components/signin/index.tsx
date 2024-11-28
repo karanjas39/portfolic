@@ -62,7 +62,7 @@ function SignIn() {
   }
 
   return (
-    <div className="w-[95%] sm:w-[70%] mx-auto flex flex-col items-center justify-center flex-1">
+    <>
       <div className="text-3xl sm:text-4xl">
         <span className="font-bold text-primary">Sign in</span> to your account
       </div>
@@ -93,7 +93,7 @@ function SignIn() {
             render={({ field }) => <PasswordInput field={field} />}
           />
           <Button type="submit" isLoading={loading}>
-            {loading ? "Signing in..." : "Sign in"}
+            Sign in
           </Button>
         </form>
       </Form>
@@ -105,7 +105,7 @@ function SignIn() {
           </span>
         </Link>
       </div>
-    </div>
+    </>
   );
 }
 

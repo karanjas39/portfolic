@@ -5,6 +5,7 @@ import { appName } from "@/lib/constants";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 const Archivo_Black_Font = Archivo_Black({
   subsets: ["latin"],
@@ -13,6 +14,7 @@ const Archivo_Black_Font = Archivo_Black({
 
 function Navbar() {
   const { data: session } = useSession();
+  const pathName = usePathname();
 
   return (
     <div className="flex w-full items-center justify-between px-3 py-2">
@@ -30,7 +32,13 @@ function Navbar() {
       <div className="flex items-center gap-2">
         <ModeToggle />
         {!session ? (
-          <Button onClick={() => signIn()}>Sign in</Button>
+          pathName === "/signin" ? (
+            <Link href="signup">
+              <Button>Sign up</Button>
+            </Link>
+          ) : (
+            <Button onClick={() => signIn()}>Sign in</Button>
+          )
         ) : (
           <Button onClick={() => signOut()}>Sign out</Button>
         )}
