@@ -13,34 +13,49 @@ const Archivo_Black_Font = Archivo_Black({
 });
 
 function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathName = usePathname();
+
+  const isSignInPage = pathName === "/signin";
+  const isProtectedPath = pathName.includes("/p");
+
+  if (status === "loading") {
+    return (
+      <div className="flex w-full items-center justify-between px-3 py-2">
+        <span>Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full items-center justify-between px-3 py-2">
-      <div>
-        <Link
-          className={cn(
-            Archivo_Black_Font.className,
-            "font-bold text-2xl text-primary"
-          )}
-          href="/"
-        >
-          {appName}.
-        </Link>
-      </div>
+      {/* Logo */}
+      <Link
+        href="/"
+        className={cn(
+          Archivo_Black_Font.className,
+          "font-bold text-2xl text-primary"
+        )}
+      >
+        {appName}.
+      </Link>
+
       <div className="flex items-center gap-2">
         <ModeToggle />
-        {!session ? (
-          pathName === "/signin" ? (
-            <Link href="signup">
-              <Button>Sign up</Button>
-            </Link>
+        {session ? (
+          isProtectedPath ? (
+            <Button onClick={() => signOut()}>Logout</Button>
           ) : (
-            <Button onClick={() => signIn()}>Sign in</Button>
+            <Link href={`/p/dashboard/${session.user?.id}`}>
+              <Button>Dashboard</Button>
+            </Link>
           )
+        ) : isSignInPage ? (
+          <Link href="/signup">
+            <Button>Sign up</Button>
+          </Link>
         ) : (
-          <Button onClick={() => signOut()}>Sign out</Button>
+          <Button onClick={() => signIn()}>Sign in</Button>
         )}
       </div>
     </div>

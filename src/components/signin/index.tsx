@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { z_signin, z_signin_type } from "@/types/user";
 import Link from "next/link";
 import PasswordInput from "../ui/passwordInput";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,7 +48,14 @@ function SignIn() {
       toast({
         description: "You have been logged in successfully.",
       });
-      router.push("/");
+
+      const session = await getSession();
+
+      if (session?.user?.id) {
+        router.push(`/p/dashboard/${session.user.id}`);
+      } else {
+        throw new Error("User ID is missing in session.");
+      }
     } catch (error) {
       const err = error as Error;
       console.error(err.message);
